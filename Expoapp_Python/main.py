@@ -4,10 +4,22 @@ from datetime import datetime
 from reminder_model import Reminder
 from alarm_model import Alarm
 from sorting import quicksort
-from storage import Repository   # ← ADD THIS
+from storage import Repository  
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
-
+@app.get("/", response_class=HTMLResponse)
+def read_root():
+    return """
+    <html>
+      <head><title>Alarm & Reminder Backend</title></head>
+      <body>
+        <h1>Alarm & Reminder Backend</h1>
+        <p>The backend is running correctly.</p>
+        <p>Use the <a href="/docs">interactive API interface</a> to test endpoints.</p>
+      </body>
+    </html>
+    """
 # -----------------------------------------
 # LOAD SAVED DATA FROM JSON AT STARTUP
 # -----------------------------------------
@@ -24,8 +36,8 @@ class ReminderRequest(BaseModel):
     due_date: str
     priority: int
 
-@app.get("/")
-def home():
+@app.get("/status")
+def status():
     return {"status": "Wethan backend running!"}
 
 @app.post("/createReminder")
